@@ -2,11 +2,21 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import {Container, Button, Form, Header, Icon} from 'semantic-ui-react'
+import {Container, Button, Form, Header, Icon, Segment} from 'semantic-ui-react'
 
 const style = {
   h1: {
     marginTop: '3em'
+  },
+  h2: {
+    margin: '4em 0em 2em'
+  },
+  h3: {
+    marginTop: '2em',
+    padding: '2em 0em'
+  },
+  last: {
+    marginBottom: '300px'
   }
 }
 
@@ -14,34 +24,8 @@ const style = {
  * COMPONENT
  */
 export class AuthForm extends Component {
-  constructor() {
-    super()
-    this.state = {
-      email: '',
-      password: '',
-      formName: '',
-      error: ''
-    }
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  componentDidMount() {
-    this.setState({
-      formName: this.props.name
-    })
-  }
-
-  // handleSubmit(evt) {
-  //   evt.preventDefault()
-  //   const formName = this.state.formName
-  //   const email = this.state.email
-  //   const password = this.state.password
-  //   this.props.auth(email, password, formName)
-  // }
-
   render() {
     const {name, displayName, handleSubmit, error} = this.props
-    console.log(this.state)
     return (
       <div>
         <Header
@@ -50,34 +34,21 @@ export class AuthForm extends Component {
           style={style.h1}
           textAlign="center"
         />
-
-        <Container>
-          <Form onSubmit={handleSubmit}>
-            <Form.Field>
-              <Form.Input
-                label="Email"
-                name="email"
-                value={this.state.email}
-                required={true}
-                onChange={e => this.setState({email: e.target.value})}
-              />
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                label="Password"
-                name="password"
-                value={this.state.password}
-                required={true}
-                onChange={e => this.setState({password: e.target.value})}
-              />
-            </Form.Field>
-
-            <Form.Button type="submit">{displayName}</Form.Button>
-
+        <Container text>
+          <form onSubmit={handleSubmit} name={name}>
+            <Segment.Group>
+              <Segment>
+                Email <input name="email" type="text" />
+              </Segment>
+              <Segment>
+                Password <input name="password" type="password" />
+              </Segment>
+            </Segment.Group>
+            <button type="submit">{displayName}</button>
             {error && error.response && <div> {error.response.data} </div>}
-          </Form>
+          </form>
           <br />
-
+          <br />
           <Button color="google plus">
             <Icon name="google plus" />
             Sign In With Google
@@ -115,9 +86,9 @@ const mapDispatch = dispatch => {
   return {
     handleSubmit(evt) {
       evt.preventDefault()
-      const formName = this.state.formName
-      const email = this.state.email
-      const password = this.state.password
+      const formName = evt.target.name
+      const email = evt.target.email.value
+      const password = evt.target.password.value
       dispatch(auth(email, password, formName))
     }
   }
@@ -132,6 +103,6 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  // handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object
 }

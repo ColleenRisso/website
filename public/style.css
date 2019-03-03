@@ -19,3 +19,11 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#header_hi {
+  margin: 7em, 1em;
+}
+
+#header_name {
+  margin: 7em;
+}

@@ -1,66 +1,49 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
-import {Button} from 'semantic-ui-react'
+import React, {Component} from 'react'
+import {Button, Container, Menu} from 'semantic-ui-react'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>BOILERMAKER</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">
-            <Button>My Account</Button>
-          </Link>
-          <Button onClick={handleClick}>Logout</Button>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/">
-            <Button>Main</Button>
-          </Link>
+export class Navbar extends Component {
+  state = {}
 
-          <Link to="/login">
-            <Button>Login</Button>
-          </Link>
+  hideFixedMenu = () => this.setState({fixed: false})
+  showFixedMenu = () => this.setState({fixed: true})
 
-          <Link to="/signup">
-            <Button>Sign Up</Button>
-          </Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-)
+  render() {
+    const {children} = this.props
+    const {fixed} = this.state
 
-/**
- * CONTAINER
- */
-const mapState = state => {
-  return {
-    isLoggedIn: !!state.user.id
+    return (
+      <Menu
+        fixed={fixed ? 'top' : null}
+        inverted={!fixed}
+        pointing={!fixed}
+        secondary={!fixed}
+        size="large"
+      >
+        <Container>
+          <Menu.Item as="a" active>
+            Home
+          </Menu.Item>
+          <Menu.Item as="a">About</Menu.Item>
+          <Menu.Item as="a">Projects</Menu.Item>
+          <Menu.Item as="a">Career</Menu.Item>
+          <Menu.Item as="a">Resume</Menu.Item>
+          <Menu.Item position="right">
+            <Button as="a" inverted={!fixed}>
+              Log in
+            </Button>
+            <Button
+              as="a"
+              inverted={!fixed}
+              primary={fixed}
+              style={{marginLeft: '0.5em'}}
+            >
+              Sign Up
+            </Button>
+          </Menu.Item>
+        </Container>
+      </Menu>
+    )
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    handleClick() {
-      dispatch(logout())
-    }
-  }
-}
-
-export default connect(mapState, mapDispatch)(Navbar)
-
-/**
- * PROP TYPES
- */
-Navbar.propTypes = {
-  handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
-}
+export default Navbar
